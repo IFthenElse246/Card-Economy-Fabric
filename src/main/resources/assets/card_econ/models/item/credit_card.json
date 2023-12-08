@@ -1,0 +1,63 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "card_econ:item/credit_card",
+		"particle": "card_econ:item/credit_card"
+	},
+	"elements": [
+		{
+			"name": "credit_card_0",
+			"from": [1, 4, 0],
+			"to": [15, 12, 1],
+			"faces": {
+				"north": {"uv": [15, 4, 1, 12], "texture": "#0"},
+				"east": {"uv": [14, 4, 15, 12], "texture": "#0"},
+				"south": {"uv": [1, 4, 15, 12], "texture": "#0"},
+				"west": {"uv": [1, 4, 2, 12], "texture": "#0"},
+				"up": {"uv": [1, 4, 15, 5], "texture": "#0"},
+				"down": {"uv": [1, 11, 15, 12], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [-2, 0.25, 4],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [-2, 0.25, 4],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -63, 3],
+			"translation": [-1.75, 4.25, 4.5],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -63, 3],
+			"translation": [-1.75, 4.25, 4.5],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 0, 3.75],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"head": {
+			"rotation": [0, 180, 0],
+			"translation": [0, 8, -3],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"fixed": {
+			"rotation": [0, 180, 0],
+			"translation": [0, 0, -7]
+		}
+	},
+	"groups": [
+		{
+			"name": "credit_card",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

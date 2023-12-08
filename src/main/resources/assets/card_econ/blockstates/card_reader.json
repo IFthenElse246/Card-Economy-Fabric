@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "card_econ:block/card_reader"
+    },
+    "facing=east": {
+      "model": "card_econ:block/card_reader",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "card_econ:block/card_reader",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "card_econ:block/card_reader",
+      "y": 270
+    }
+  }
+}
