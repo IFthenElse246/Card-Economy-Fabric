@@ -2,5 +2,7 @@
   "item.card_econ.credit_card": "Credit Card",
   "itemgroup.economy": "Economy",
   "block.card_econ.card_reader": "Credit Card Reader",
-  "actionbar.card_econ.card_reader_owner": "You are now the owner of this card reader."
+  "actionbar.card_econ.card_reader_owner": "You are now the owner of this card reader.",
+  "text.card_econ.card_reader_owner_label": "Paying to: %s",
+  "text.card_econ.payment_reason": "Reason:"
 }

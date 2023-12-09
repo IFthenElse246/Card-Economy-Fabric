@@ -1,5 +1,7 @@
 package net.ianfinity.cardecon.data;
 
+import net.ianfinity.cardecon.CardEcon;
+import net.ianfinity.cardecon.event.CurrencyChanged;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.world.PersistentStateManager;
@@ -14,24 +16,63 @@ public class PlayerEconDat {
     private final NbtCompound nbt = new NbtCompound();
     private static final Map<UUID, PlayerEconDat> playerDats = new HashMap<>();
 
-    public PlayerEconDat(UUID uuid){
+    private PlayerEconDat(UUID uuid){
         this(uuid, new NbtCompound());
     }
 
-    public PlayerEconDat(UUID uuid, NbtCompound data) {
+    private PlayerEconDat(UUID uuid, NbtCompound data) {
         this.uuid = uuid;
 
-        if (data.contains("Currency", NbtElement.NUMBER_TYPE)) {
-            nbt.putInt("Currency", data.getInt("Currency"));
-        } else {
-            nbt.putInt("Currency", 0);
-        }
+        loadNbt(data);
 
         playerDats.put(uuid, this);
     }
 
+    private void loadNbt(NbtCompound data) {
+        Long oldCurrency = nbt.contains("Currency", NbtElement.LONG_TYPE) ? nbt.getLong("Currency") : null;
+
+        if (data.contains("Currency", NbtElement.NUMBER_TYPE)) {
+            nbt.putLong("Currency", data.getLong("Currency"));
+        } else {
+            nbt.putLong("Currency", 0);
+        }
+
+        final Long newCurrency = nbt.getLong("Currency");
+        if (oldCurrency != null && !newCurrency.equals(oldCurrency)) {
+            CurrencyChanged.EVENT.invoker().interact(uuid, newCurrency, oldCurrency);
+        }
+
+        if (data.contains("Name", NbtElement.STRING_TYPE)) {
+            nbt.putString("Name", data.getString("Name"));
+        } else {
+            nbt.putString("Name", "");
+        }
+    }
+
+    public static PlayerEconDat getOrCreatePlayerData(UUID uuid) {
+        if (playerDats.containsKey(uuid)) {
+            return playerDats.get(uuid);
+        } else {
+            return new PlayerEconDat(uuid);
+        }
+    }
+
+    public static PlayerEconDat getOrCreatePlayerData(UUID uuid, NbtCompound data) {
+        if (playerDats.containsKey(uuid)) {
+            PlayerEconDat dat = playerDats.get(uuid);
+            dat.loadNbt(data);
+            return dat;
+        } else {
+            return new PlayerEconDat(uuid, data);
+        }
+    }
+
     public static PlayerEconDat getPlayerData(UUID uuid) {
         return playerDats.get(uuid);
+    }
+
+    public static boolean hasPlayerData(UUID uuid) {
+        return playerDats.containsKey(uuid);
     }
 
     public UUID getUuid() {
@@ -42,16 +83,28 @@ public class PlayerEconDat {
         return nbt;
     }
 
-    public Integer getCurrency() {
-        return nbt.getInt("Currency");
+    public Long getCurrency() {
+        return nbt.getLong("Currency");
     }
 
-    public void setCurrency(Integer currency) {
+    public String getName() {
+        return nbt.getString("Name");
+    }
+
+    public void updateName(String name) {
+        nbt.putString("Name", name);
+    }
+
+    public void setCurrency(Long currency) {
         if (currency < 0) {
             throw new IllegalArgumentException("currency parameter of setCurrency (PlayerEconDat) must be >= 0.");
         }
 
-        nbt.putInt("Currency", currency);
+        Long oldCurrency = nbt.contains("Currency") ? nbt.getLong("Currency") : null;
+        nbt.putLong("Currency", currency);
+
+        if (oldCurrency != null && !oldCurrency.equals(currency))
+            CurrencyChanged.EVENT.invoker().interact(uuid, currency, oldCurrency);
     }
 
     public static Set<UUID> getUuids() {

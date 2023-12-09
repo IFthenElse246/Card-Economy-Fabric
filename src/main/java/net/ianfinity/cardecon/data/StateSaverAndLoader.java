@@ -23,9 +23,9 @@ public class StateSaverAndLoader extends PersistentState {
         for (String strUuid : playerDatas.getKeys()) {
             UUID uuid = UUID.fromString(strUuid);
             if (playerDatas.contains(strUuid, NbtElement.COMPOUND_TYPE))
-                new PlayerEconDat(uuid, playerDatas.getCompound(strUuid));
+                PlayerEconDat.getOrCreatePlayerData(uuid, playerDatas.getCompound(strUuid));
             else
-                new PlayerEconDat(uuid);
+                PlayerEconDat.getOrCreatePlayerData(uuid);
         }
 
         return state;

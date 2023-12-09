@@ -3,7 +3,7 @@
 	"package": "net.ianfinity.cardecon.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+      "ServerLoginNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -6,7 +6,7 @@ import net.minecraft.text.Text;
 
 public class CardReaderScreen extends CottonClientScreen {
     public CardReaderScreen(GuiDescription description) {
-        super(Text.translatable("block.card_econ.card_reader"), description);
+        super(description);
 
     }
 }

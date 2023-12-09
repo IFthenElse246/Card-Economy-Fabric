@@ -1,6 +1,7 @@
 package net.ianfinity.cardecon.block.blocks;
 
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.ianfinity.cardecon.CardEcon;
@@ -16,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
@@ -24,6 +26,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -86,9 +89,10 @@ public class CardReader extends HorizontalFacingBlock implements BlockEntityProv
         if (be instanceof CardReaderEntity readerEntity) {  // make sure the block entity exists
             if (world.isClient()) {
                 if (player.getMainHandStack().getItem() instanceof CreditCard) {    // make sure they are holding their credit card
-                    if (readerEntity.getOwnerUuid() != null) { // block has an owner
-                        MinecraftClient.getInstance().setScreen(new CardReaderScreen(new CardReaderGui())); // open the gui
-                    }
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeGlobalPos(GlobalPos.create(world.getRegistryKey(), pos));
+                    ClientPlayNetworking.send(NetworkingIdentifiers.REQUEST_OWNER, buf); // request information
+
                     return ActionResult.success(true);  // send to server
                 } else {
                     return ActionResult.FAIL;   // don't send to server

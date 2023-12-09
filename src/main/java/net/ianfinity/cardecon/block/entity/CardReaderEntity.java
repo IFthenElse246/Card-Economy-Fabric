@@ -44,24 +44,10 @@ public class CardReaderEntity extends BlockEntity {
 
     public void setOwnerUuid(@Nullable UUID uuid) {
         OwnerUuid = uuid;
-        if (world != null) {
-            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
-        }
     }
 
     @Nullable
     public UUID getOwnerUuid() {
         return OwnerUuid;
-    }
-
-    @Nullable
-    @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
-    }
-
-    @Override
-    public NbtCompound toInitialChunkDataNbt() {
-        return createNbt();
     }
 }
