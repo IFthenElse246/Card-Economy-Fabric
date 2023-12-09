@@ -2,15 +2,21 @@ package net.ianfinity.cardecon.block.entity;
 
 import net.ianfinity.cardecon.CardEcon;
 import net.ianfinity.cardecon.block.ModBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class CardReaderEntity extends BlockEntity {
+    @Nullable
     private UUID OwnerUuid = null;
 
     public CardReaderEntity(BlockPos pos, BlockState state) {
@@ -36,11 +42,26 @@ public class CardReaderEntity extends BlockEntity {
         }
     }
 
-    public void setOwnerUuid(UUID uuid) {
+    public void setOwnerUuid(@Nullable UUID uuid) {
         OwnerUuid = uuid;
+        if (world != null) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+        }
     }
 
+    @Nullable
     public UUID getOwnerUuid() {
         return OwnerUuid;
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt() {
+        return createNbt();
     }
 }
