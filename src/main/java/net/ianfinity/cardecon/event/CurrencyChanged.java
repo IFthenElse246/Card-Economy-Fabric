@@ -2,6 +2,7 @@ package net.ianfinity.cardecon.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -13,5 +14,5 @@ public interface CurrencyChanged {
                 }
             });
 
-    void interact(UUID uuid, long currency, long oldCurrency);
+    void interact(UUID uuid, Long currency, @Nullable Long oldCurrency);
 }

@@ -1,15 +1,14 @@
 package net.ianfinity.cardecon.data;
 
 import net.ianfinity.cardecon.CardEcon;
+import net.ianfinity.cardecon.CardEconClient;
 import net.ianfinity.cardecon.event.CurrencyChanged;
+import net.ianfinity.cardecon.event.DataChanged;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.world.PersistentStateManager;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerEconDat {
     private final UUID uuid;
@@ -31,14 +30,14 @@ public class PlayerEconDat {
     private void loadNbt(NbtCompound data) {
         Long oldCurrency = nbt.contains("Currency", NbtElement.LONG_TYPE) ? nbt.getLong("Currency") : null;
 
-        if (data.contains("Currency", NbtElement.NUMBER_TYPE)) {
+        if (data.contains("Currency", NbtElement.LONG_TYPE)) {
             nbt.putLong("Currency", data.getLong("Currency"));
         } else {
             nbt.putLong("Currency", 0);
         }
 
         final Long newCurrency = nbt.getLong("Currency");
-        if (oldCurrency != null && !newCurrency.equals(oldCurrency)) {
+        if (!newCurrency.equals(oldCurrency)) {
             CurrencyChanged.EVENT.invoker().interact(uuid, newCurrency, oldCurrency);
         }
 
@@ -47,6 +46,7 @@ public class PlayerEconDat {
         } else {
             nbt.putString("Name", "");
         }
+        DataChanged.EVENT.invoker().interact();
     }
 
     public static PlayerEconDat getOrCreatePlayerData(UUID uuid) {
@@ -93,6 +93,7 @@ public class PlayerEconDat {
 
     public void updateName(String name) {
         nbt.putString("Name", name);
+        DataChanged.EVENT.invoker().interact();
     }
 
     public void setCurrency(Long currency) {
@@ -103,8 +104,18 @@ public class PlayerEconDat {
         Long oldCurrency = nbt.contains("Currency") ? nbt.getLong("Currency") : null;
         nbt.putLong("Currency", currency);
 
-        if (oldCurrency != null && !oldCurrency.equals(currency))
+        if (!currency.equals(oldCurrency)) {
             CurrencyChanged.EVENT.invoker().interact(uuid, currency, oldCurrency);
+            DataChanged.EVENT.invoker().interact();
+        }
+    }
+
+    public void destroy() {
+        playerDats.remove(uuid);
+    }
+
+    public static void clear() {
+        playerDats.clear();
     }
 
     public static Set<UUID> getUuids() {

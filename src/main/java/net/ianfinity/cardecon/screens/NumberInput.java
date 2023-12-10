@@ -15,6 +15,6 @@ public class NumberInput extends WTextField {
 
     @Override
     public InputResult onCharTyped(char ch) {
-        return (ch < '9' && ch > '0') ? super.onCharTyped(ch) : InputResult.IGNORED;
+        return (ch <= '9' && ch >= '0') ? super.onCharTyped(ch) : InputResult.IGNORED;
     }
 }

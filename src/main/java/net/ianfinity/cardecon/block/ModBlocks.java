@@ -25,19 +25,19 @@ public class ModBlocks {
     public static final Block CARD_READER = registerBlock("card_reader", new CardReader(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).sounds(BlockSoundGroup.STONE)) {
     });
     public static final BlockEntityType<CardReaderEntity> CARD_READER_ENTITY = registerBlockEntity("card_reader", FabricBlockEntityTypeBuilder.create(CardReaderEntity::new, CARD_READER).build());
+    public static final Item CARD_READER_ITEM = registerBlockItem("card_reader", new BlockItem(CARD_READER, new FabricItemSettings()));
 
-    private static BlockEntityType registerBlockEntity(String name, BlockEntityType be) {
+    private static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String name, BlockEntityType<T> be) {
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(CardEcon.MOD_ID, name), be);
     }
 
     private static Block registerBlock(String name, Block block) {
-        registerBlockItem(name, block);
         return Registry.register(Registries.BLOCK, new Identifier(CardEcon.MOD_ID, name), block);
     }
 
-    private static Item registerBlockItem(String name, Block block) {
+    private static Item registerBlockItem(String name, BlockItem blockItem) {
         return Registry.register(Registries.ITEM, new Identifier(CardEcon.MOD_ID, name),
-                new BlockItem(block, new FabricItemSettings()));
+                blockItem);
     }
 
     public static void registerModBlocks() {

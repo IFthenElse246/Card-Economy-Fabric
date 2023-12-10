@@ -4,5 +4,18 @@
   "block.card_econ.card_reader": "Credit Card Reader",
   "actionbar.card_econ.card_reader_owner": "You are now the owner of this card reader.",
   "text.card_econ.card_reader_owner_label": "Paying to: %s",
-  "text.card_econ.payment_reason": "Reason:"
+  "text.card_econ.payment_reason": "Reason",
+  "text.card_econ.payment_amount": "Amount",
+  "text.card_econ.current_balance": "Balance: %d",
+  "text.card_econ.pay_button": "Pay",
+  "tooltip.card_econ.press_shift_for_info": "Press SHIFT to view balance",
+  "tooltip.card_econ.card_balance": "Your balance: %d",
+  "tooltip.card_econ.credit_card": "Right click to manage your money",
+  "commands.balance.add.success.single": "Added %d to %s's balance.",
+  "commands.balance.add.success.multiple": "Added %d each to %d players' balances.",
+  "commands.balance.remove.success.single": "Removed %d from %s's balance (new balance: %d).",
+  "commands.balance.remove.success.multiple": "Removed a total of %d from %d players' balances (%d each).",
+  "commands.balance.remove.fail": "Failed to remove balance from target(s), they already have a balance of 0.",
+  "commands.balance.get.success.single": "%s has a balance of %d.",
+  "commands.balance.get.success.multiple": "%d players have a combined balance of %d."
 }

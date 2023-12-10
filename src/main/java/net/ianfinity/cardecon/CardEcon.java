@@ -11,9 +11,11 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.impl.screenhandler.Networking;
 import net.ianfinity.cardecon.block.ModBlocks;
 import net.ianfinity.cardecon.block.entity.CardReaderEntity;
+import net.ianfinity.cardecon.command.ModCommands;
 import net.ianfinity.cardecon.data.PlayerEconDat;
 import net.ianfinity.cardecon.data.StateSaverAndLoader;
 import net.ianfinity.cardecon.event.CurrencyChanged;
+import net.ianfinity.cardecon.event.DataChanged;
 import net.ianfinity.cardecon.event.PlayerCurrencyChanged;
 import net.ianfinity.cardecon.item.ModItemGroups;
 import net.ianfinity.cardecon.item.ModItems;
@@ -28,6 +30,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +46,7 @@ public class CardEcon implements ModInitializer {
 		ModItemGroups.registerItemGroups();
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
+		ModCommands.registerCommands();
 
 		ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
 			CurrencyChanged.EVENT.register((uuid, currency, oldCurrency) -> {
@@ -60,6 +64,8 @@ public class CardEcon implements ModInitializer {
 			buf.writeLong(currency);
 			ServerPlayNetworking.send(player, NetworkingIdentifiers.UPDATE_CURRENCY, buf);
 		});
+
+
 
 		ServerPlayNetworking.registerGlobalReceiver(NetworkingIdentifiers.REQUEST_OWNER, (server, player, handler, buf, responseSender) -> {
 			GlobalPos gPos = buf.readGlobalPos();

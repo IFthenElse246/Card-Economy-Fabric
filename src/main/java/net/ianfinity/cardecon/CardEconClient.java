@@ -1,8 +1,10 @@
 package net.ianfinity.cardecon;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.ianfinity.cardecon.block.ModBlocks;
+import net.ianfinity.cardecon.event.MyCurrencyChanged;
 import net.ianfinity.cardecon.networking.NetworkingIdentifiers;
 import net.ianfinity.cardecon.screens.CardReaderGui;
 import net.ianfinity.cardecon.screens.CardReaderScreen;
@@ -11,7 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class CardEconClient implements ClientModInitializer {
-    
+    public static long currency = 0;
 
 
     @Override
@@ -33,6 +35,12 @@ public class CardEconClient implements ClientModInitializer {
             client.execute(() -> {
                 MinecraftClient.getInstance().setScreen(new CardReaderScreen(new CardReaderGui(finalUsername))); // open the gui
             });
+        });
+
+        ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifiers.UPDATE_CURRENCY, (client, handler, buf, responseSender) -> {
+
+            currency = buf.readLong();
+            MyCurrencyChanged.EVENT.invoker().interact(currency);
         });
     }
 }

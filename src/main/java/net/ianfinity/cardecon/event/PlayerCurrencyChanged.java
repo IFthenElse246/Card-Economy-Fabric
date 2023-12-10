@@ -14,5 +14,5 @@ public interface PlayerCurrencyChanged {
                 }
             });
 
-    void interact(ServerPlayerEntity player, long currency, long oldCurrency);
+    void interact(ServerPlayerEntity player, Long currency, Long oldCurrency);
 }
