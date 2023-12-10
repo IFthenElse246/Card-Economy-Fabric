@@ -1,0 +1,63 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "card_econ:item/bill",
+		"particle": "card_econ:item/bill"
+	},
+	"elements": [
+		{
+			"name": "bill_0",
+			"from": [0, 3.5, 7.5],
+			"to": [16, 12.5, 8.5],
+			"faces": {
+				"north": {"uv": [16, 4, 0, 13], "texture": "#0"},
+				"east": {"uv": [15, 4, 16, 13], "texture": "#0"},
+				"south": {"uv": [0, 4, 16, 13], "texture": "#0"},
+				"west": {"uv": [0, 4, 1, 13], "texture": "#0"},
+				"up": {"uv": [0, 4, 16, 5], "texture": "#0"},
+				"down": {"uv": [0, 12, 16, 13], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 1.25, 1],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 1.25, 1],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, -90, 5],
+			"translation": [1.13, 3.2, 1.13],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -90, 5],
+			"translation": [1.13, 3.2, 1.13],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"head": {
+			"translation": [0, 8.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"fixed": {
+			"translation": [0, 0, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "bill",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}
