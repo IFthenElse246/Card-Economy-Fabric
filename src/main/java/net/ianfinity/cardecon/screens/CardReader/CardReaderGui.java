@@ -1,30 +1,61 @@
-package net.ianfinity.cardecon.screens;
+package net.ianfinity.cardecon.screens.CardReader;
 
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
+import io.github.cottonmc.cotton.gui.widget.data.InputResult;
 import io.github.cottonmc.cotton.gui.widget.data.Texture;
 import io.github.cottonmc.cotton.gui.widget.data.VerticalAlignment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.ianfinity.cardecon.CardEcon;
 import net.ianfinity.cardecon.CardEconClient;
+import net.ianfinity.cardecon.networking.NetworkingIdentifiers;
+import net.ianfinity.cardecon.screens.NumberInput;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
+import java.util.UUID;
+
 public class CardReaderGui extends LightweightGuiDescription {
+    public final UUID ownerUuid;
+
     public final WGridPanel root;
     public final WTextField reasonField;
     public final NumberInput amountField;
     public final WButton pay;
+    public final WLabel result;
 
     public WSprite card;
     private float card_depth = 0;
     private float card_position = 2;
     private short card_anim_stage = 0;
     public final int width = 200;
-    public final int height = 150;
+    public final int height = 100;
 
-    public CardReaderGui(String ownerName) {
+    private float messageShowTime = 0;
+
+    private static class PayButton extends WButton {
+        public final CardReaderGui gui;
+
+        public PayButton(Text text, CardReaderGui gui) {
+            super(text);
+            this.gui = gui;
+        }
+
+        @Override
+        public InputResult onClick(int x, int y, int button) {
+            gui.pay();
+            return super.onClick(x, y, button);
+        }
+    }
+
+    public CardReaderGui(String ownerName, UUID uuid) {
+        ownerUuid = uuid;
+
         root = new WGridPanel(1);
         setRootPanel(root);
         root.setSize(width, height);
@@ -40,18 +71,56 @@ public class CardReaderGui extends LightweightGuiDescription {
         root.add(reasonField, 10, 21, width-20, 18);
 
         amountField = new NumberInput(Text.translatable("text.card_econ.payment_amount"));
-        root.add(amountField, 10, 44, width/2 - 15, 18);
+        root.add(amountField, 10, 44, width/2 - 13, 18);
 
-        pay = new WButton(Text.translatable("text.card_econ.pay_button"));
-        root.add(pay, width/2 + 5, 44, width/2 - 15, 18);
+        pay = new PayButton(Text.translatable("text.card_econ.pay_button"), this);
+        root.add(pay, width/2 + 3, 44, width/2 - 13, 18);
 
         WDynamicLabel balanceLabel = new WDynamicLabel(() -> {
             return I18n.translate("text.card_econ.current_balance", CardEconClient.currency);
         });
-        root.add(balanceLabel, 13, 70, width - 26, 9);
+        root.add(balanceLabel, 13, 70, width/2 - 18, 9);
+
+        result = new WLabel(Text.literal(""));
+        result.setHorizontalAlignment(HorizontalAlignment.CENTER);
+    }
+
+    public void pay() {
+        if (card_anim_stage != 0) {
+            return;
+        }
+        card_anim_stage = 1;
+
+        long value = 0L;
+        try {
+            value = Long.parseLong(amountField.getText());
+        } catch (NumberFormatException nfe) {
+
+        }
+
+        if (value == 0) {
+            return;
+        }
+
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeUuid(ownerUuid);
+        buf.writeLong(value);
+        ClientPlayNetworking.send(NetworkingIdentifiers.CARD_READER_PAY, buf);
+    }
+
+    public void showMessage(boolean success, String message) {
+        messageShowTime = 2;
+        result.setText(Text.translatable(message).formatted(success ? Formatting.GREEN : Formatting.RED));
     }
 
     public void onFrame(float deltaTime) {
+        if (messageShowTime > 0) {
+            messageShowTime -= deltaTime;
+            root.add(result, 13, 85, width - 26, 9);
+        } else {
+            root.remove(result);
+        }
+
         long value = 0L;
         try {
             value = Long.parseLong(amountField.getText());
@@ -78,7 +147,7 @@ public class CardReaderGui extends LightweightGuiDescription {
                 card_position = 1;
                 card_depth = Math.max(card_depth - deltaTime * 4, 0);
                 if (card_depth == 0) {
-                    card_anim_stage = 1;
+                    card_anim_stage = 0;
                 }
                 break;
             default:

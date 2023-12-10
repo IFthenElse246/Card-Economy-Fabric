@@ -1,5 +1,8 @@
 {
   "item.card_econ.credit_card": "Credit Card",
+  "item.card_econ.bill": "Single Bill",
+  "item.card_econ.bill_stack": "Stack of Bills",
+  "item.card_econ.bill_wad": "Wad of Bills",
   "itemgroup.economy": "Economy",
   "block.card_econ.card_reader": "Credit Card Reader",
   "actionbar.card_econ.card_reader_owner": "You are now the owner of this card reader.",
@@ -17,5 +20,7 @@
   "commands.balance.remove.success.multiple": "Removed a total of %d from %d players' balances (%d each).",
   "commands.balance.remove.fail": "Failed to remove balance from target(s), they already have a balance of 0.",
   "commands.balance.get.success.single": "%s has a balance of %d.",
-  "commands.balance.get.success.multiple": "%d players have a combined balance of %d."
+  "commands.balance.get.success.multiple": "%d players have a combined balance of %d.",
+  "text.card_econ.card_reader.pay.fail.insufficient_balance": "You do not have enough funds to complete this transaction.",
+  "text.card_econ.card_reader.pay.success": "Payment successfully sent."
 }

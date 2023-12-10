@@ -1,6 +1,5 @@
 package net.ianfinity.cardecon.block.blocks;
 
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -8,11 +7,8 @@ import net.ianfinity.cardecon.CardEcon;
 import net.ianfinity.cardecon.block.entity.CardReaderEntity;
 import net.ianfinity.cardecon.item.items.CreditCard;
 import net.ianfinity.cardecon.networking.NetworkingIdentifiers;
-import net.ianfinity.cardecon.screens.CardReaderGui;
-import net.ianfinity.cardecon.screens.CardReaderScreen;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
